@@ -274,7 +274,7 @@ plot_bxp <- trial_tidy %>%
     "stake_plant", "planted_number_plot",
     "harvest_number", "root_weight_air",
     "root_weight_water", "harvest_number_plan",
-    "yield_ha_v2", "root_rot_perc"
+    "yield_ha_v2", "root_rot_perc", "flesh_color_50inner1_8"
   )) %>%
   ggplot(aes(x = trial_name, y = values)) +
   geom_violin(trim = FALSE, fill = "gray") +
@@ -289,18 +289,18 @@ plot_bxp <- trial_tidy %>%
       size = 7, face = "bold.italic")
   ) +
   facet_wrap(~var,
-    ncol = 7, scales = "free_y"
+    ncol = 5, scales = "free_y"
   ) 
 plot_bxp
 ggsave(paste0("images\\boxplot_", trial_interest, Sys.Date(), ".png"),
-    plot = plot_bxp, units = "in", dpi = 300, width = 14, height = 8
+    plot = plot_bxp, units = "in", dpi = 300, width = 12, height = 10
   )
 ```
 
 ## Save the tidy data for analysis
 
 ```{r eval=FALSE}
-write.csv(trial_tidy, here::here("output", paste("01_", year_interest, trial_interest,
+write.csv(trial_tidy %>% select(-flesh_color_50inner1_8), here::here("output", paste("01_", year_interest, trial_interest,
   "_tidy_data4analysis_", Sys.Date(), ".csv", sep = "")), row.names = FALSE)
 ```
 
@@ -419,6 +419,7 @@ trial_rm_sd <- remove_no_var_tidy(my_dat = trial_tidy_all,
                    analysis_trait = analysis_trait,
                    meta_info = meta_col)
 master_data[["mean_of_sd"]] = sd_mean
+
 ```
 
 ## Trait ideal
@@ -475,7 +476,7 @@ shared <- plot(results, type = "connectivity")
 
 # ggsave(paste('images\\shared_', trial_interest, Sys.Date(), ".png", sep = "_"),
 #        plot = shared, units = "in", dpi = 300, width = 8, height = 6)
-  
+#   
 summary <- results$summ_traits 
 
 p1 <- summary %>% 
